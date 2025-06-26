@@ -38943,16 +38943,6 @@ async function action(payload) {
   if (pullRequestNumber) {
     await addComment(pullRequestNumber, comment, reportName);
   }
-  await addCheck(
-    comment,
-    reportName,
-    commit,
-    failBelowThreshold ? (belowThreshold ? "failure" : "success") : "neutral",
-  );
-
-  if (failBelowThreshold && belowThreshold) {
-    core.setFailed("Minimum coverage requirement was not satisfied");
-  }
 }
 
 function formatFileUrl(sourceDir, fileName, commit) {
@@ -39066,8 +39056,6 @@ function markdownReport(reports, commit, options) {
     | **All files** | `78%`    | :x:                |
     | foo.py        | `80%`    | :white_check_mark: |
     | bar.py        | `75%`    | :x:                |
-
-    _Minimum allowed coverage is `80%`_
     */
 
     const total = Math.floor(report.total);
@@ -39107,9 +39095,6 @@ function markdownReport(reports, commit, options) {
     const titleText = `<strong>${reportName}${folder}</strong>`;
     output += `${titleText}\n\n${table}\n\n`;
   }
-  const minimumCoverageText = `_Minimum allowed coverage is \`${minimumCoverage}%\`_`;
-  const footerText = `<p align="right">${credits} against ${commit} </p>`;
-  output += `${minimumCoverageText}\n\n${footerText}`;
   return output;
 }
 
@@ -39135,22 +39120,6 @@ async function addComment(pullRequestNumber, body, reportName) {
       ...github.context.repo,
     });
   }
-}
-
-async function addCheck(body, reportName, sha, conclusion) {
-  const checkName = reportName ? reportName : "coverage";
-
-  await client.rest.checks.create({
-    name: checkName,
-    head_sha: sha,
-    status: "completed",
-    conclusion: conclusion,
-    output: {
-      title: checkName,
-      summary: body,
-    },
-    ...github.context.repo,
-  });
 }
 
 async function listChangedFiles(pullRequestNumber) {
@@ -39201,7 +39170,6 @@ module.exports = {
   action,
   markdownReport,
   addComment,
-  addCheck,
   listChangedFiles,
 };
 
