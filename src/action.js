@@ -159,11 +159,37 @@ function markdownReport(reports, commit, options) {
   } = options || {};
   const status = (total) =>
     total >= minimumCoverage ? ":white_check_mark:" : ":x:";
+
+  // bail if there aren't any reports
+  if (reports.length === 0) return "";
+
   // Setup files
   const files = [];
-  let output = "";
+  let output = `### ${reportName}\n\n`;
+  output += [
+    [
+      "File",
+      "Coverage",
+      showLine ? "Lines" : undefined,
+      showBranch ? "Branches" : undefined,
+      " ",
+      showMissing ? "Missing" : undefined,
+    ],
+    [
+      "-",
+      ":-:",
+      showLine ? ":-:" : undefined,
+      showBranch ? ":-:" : undefined,
+      ":-:",
+      showMissing ? ":-:" : undefined,
+    ],
+  ]
+    .map((row) => `| ${row.filter(Boolean).join(" | ")} |`)
+    .join("\n");
+  output += "\n";
+  const reportRowGroups = [];
   for (const report of reports) {
-    const folder = reports.length <= 1 ? "" : ` ${report.folder}`;
+    const folder = reports.length <= 1 ? null : report.folder;
     for (const file of report.files.filter(
       (file) => filteredFiles == null || filteredFiles.includes(file.filename),
     )) {
@@ -187,56 +213,45 @@ function markdownReport(reports, commit, options) {
       ]);
     }
 
-    // Construct table
-    /*
-    | File          | Coverage |                    |
-    |---------------|:--------:|:------------------:|
-    | **All files** | `78%`    | :x:                |
-    | foo.py        | `80%`    | :white_check_mark: |
-    | bar.py        | `75%`    | :x:                |
-    */
-
     const total = Math.floor(report.total);
     const linesTotal = Math.floor(report.line);
     const branchTotal = Math.floor(report.branch);
-    const table = [
+    reportRowGroups.push(
       [
-        "File",
-        "Coverage",
-        showLine ? "Lines" : undefined,
-        showBranch ? "Branches" : undefined,
-        " ",
-        showMissing ? "Missing" : undefined,
-      ],
-      [
-        "-",
-        ":-:",
-        showLine ? ":-:" : undefined,
-        showBranch ? ":-:" : undefined,
-        ":-:",
-        showMissing ? ":-:" : undefined,
-      ],
-      [
-        "**All files**",
-        `\`${total}%\``,
-        showLine ? `\`${linesTotal}%\`` : undefined,
-        showBranch ? `\`${branchTotal}%\`` : undefined,
-        status(total),
-        showMissing ? " " : undefined,
-      ],
-      ...files,
-    ]
-      .map((row) => {
-        return `| ${row.filter(Boolean).join(" | ")} |`;
-      })
-      .join("\n");
-    const titleText = `<strong>${reportName}${folder}</strong>`;
-    output += `${titleText}\n\n${table}\n\n`;
+        [
+          `**${folder ? folder : "All files"}**`,
+          `\`${total}%\``,
+          showLine ? `\`${linesTotal}%\`` : undefined,
+          showBranch ? `\`${branchTotal}%\`` : undefined,
+          status(total),
+          showMissing ? " " : undefined,
+        ],
+        ...files,
+      ]
+        .map((row) => `| ${row.filter(Boolean).join(" | ")} |`)
+        .join("\n"),
+    );
   }
+  const blankRow = [
+    " ",
+    " ",
+    showLine ? " " : undefined,
+    showBranch ? " " : undefined,
+    " ",
+    showMissing ? " " : undefined,
+  ];
+  output += reportRowGroups.join(
+    `\n| ${blankRow.filter(Boolean).join(" | ")} |\n`,
+  );
   return output;
 }
 
 async function addComment(pullRequestNumber, body, reportName) {
+  if (!body) {
+    core.info("No body provided for comment, skipping.");
+    return;
+  }
+
   const comments = await client.rest.issues.listComments({
     issue_number: pullRequestNumber,
     ...github.context.repo,

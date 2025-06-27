@@ -37,13 +37,12 @@ async function readCoverageFromFile(path, options) {
 }
 
 function trimFolder(path, positionOfFirstDiff) {
-  const lastFolder = path.lastIndexOf("/") + 1;
-  if (positionOfFirstDiff >= lastFolder) {
-    return path.substr(lastFolder);
+  const filenameIndex = path.lastIndexOf("/") + 1;
+  const diffFolderIndex = path.lastIndexOf("/", positionOfFirstDiff) + 1;
+  if (filenameIndex === diffFolderIndex) {
+    return path.substr(filenameIndex);
   } else {
-    const startOffset = Math.min(positionOfFirstDiff - 1, lastFolder);
-    const length = path.length - startOffset - lastFolder - 2; // remove filename
-    return path.substr(startOffset, length);
+    return path.substr(diffFolderIndex).split("/")[0];
   }
 }
 
