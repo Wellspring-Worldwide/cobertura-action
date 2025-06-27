@@ -341,60 +341,52 @@ test("markdownReport", () => {
       minimumCoverage: 70,
       reportName: reportName,
     }),
-  ).toBe(`<strong>${reportName}</strong>
+  ).toBe(`### ${reportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
 | **All files** | \`77%\` | :white_check_mark: |
 | \\_\\_init\\_\\_.py | \`80%\` | :white_check_mark: |
 | bar.py | \`75%\` | :white_check_mark: |
-| foo.py | \`75%\` | :white_check_mark: |
-
-`);
+| foo.py | \`75%\` | :white_check_mark: |`);
 
   expect(markdownReport([dummyReport], commit))
-    .toBe(`<strong>${defaultReportName}</strong>
+    .toBe(`### ${defaultReportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
 | **All files** | \`77%\` | :x: |
 | \\_\\_init\\_\\_.py | \`80%\` | :x: |
 | bar.py | \`75%\` | :x: |
-| foo.py | \`75%\` | :x: |
-
-`);
+| foo.py | \`75%\` | :x: |`);
 
   expect(
     markdownReport([dummyReport], commit, {
       minimumCoverage: 70,
       showLine: true,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage | Lines |   |
 | - | :-: | :-: | :-: |
 | **All files** | \`77%\` | \`77%\` | :white_check_mark: |
 | \\_\\_init\\_\\_.py | \`80%\` | \`80%\` | :white_check_mark: |
 | bar.py | \`75%\` | \`80%\` | :white_check_mark: |
-| foo.py | \`75%\` | \`100%\` | :white_check_mark: |
-
-`);
+| foo.py | \`75%\` | \`100%\` | :white_check_mark: |`);
 
   expect(
     markdownReport([dummyReport], commit, {
       minimumCoverage: 70,
       showBranch: true,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage | Branches |   |
 | - | :-: | :-: | :-: |
 | **All files** | \`77%\` | \`0%\` | :white_check_mark: |
 | \\_\\_init\\_\\_.py | \`80%\` | \`0%\` | :white_check_mark: |
 | bar.py | \`75%\` | \`0%\` | :white_check_mark: |
-| foo.py | \`75%\` | \`75%\` | :white_check_mark: |
-
-`);
+| foo.py | \`75%\` | \`75%\` | :white_check_mark: |`);
 
   expect(
     markdownReport([dummyReport], commit, {
@@ -402,16 +394,14 @@ test("markdownReport", () => {
       showLine: true,
       showBranch: true,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage | Lines | Branches |   |
 | - | :-: | :-: | :-: | :-: |
 | **All files** | \`77%\` | \`77%\` | \`0%\` | :white_check_mark: |
 | \\_\\_init\\_\\_.py | \`80%\` | \`80%\` | \`0%\` | :white_check_mark: |
 | bar.py | \`75%\` | \`80%\` | \`0%\` | :white_check_mark: |
-| foo.py | \`75%\` | \`100%\` | \`75%\` | :white_check_mark: |
-
-`);
+| foo.py | \`75%\` | \`100%\` | \`75%\` | :white_check_mark: |`);
 
   expect(
     markdownReport([dummyReport], commit, {
@@ -420,16 +410,14 @@ test("markdownReport", () => {
       showBranch: true,
       showMissing: true,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage | Lines | Branches |   | Missing |
 | - | :-: | :-: | :-: | :-: | :-: |
 | **All files** | \`77%\` | \`77%\` | \`0%\` | :white_check_mark: |   |
 | \\_\\_init\\_\\_.py | \`80%\` | \`80%\` | \`0%\` | :white_check_mark: | \`24-26\` |
 | bar.py | \`75%\` | \`80%\` | \`0%\` | :white_check_mark: | \`23-24\` \`39-40\` \`50\` |
-| foo.py | \`75%\` | \`100%\` | \`75%\` | :white_check_mark: |   |
-
-`);
+| foo.py | \`75%\` | \`100%\` | \`75%\` | :white_check_mark: |   |`);
 
   expect(
     markdownReport([dummyReport], commit, {
@@ -439,69 +427,57 @@ test("markdownReport", () => {
       showMissing: true,
       showMissingMaxLength: 5,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage | Lines | Branches |   | Missing |
 | - | :-: | :-: | :-: | :-: | :-: |
 | **All files** | \`77%\` | \`77%\` | \`0%\` | :white_check_mark: |   |
 | \\_\\_init\\_\\_.py | \`80%\` | \`80%\` | \`0%\` | :white_check_mark: | \`24-26\` |
 | bar.py | \`75%\` | \`80%\` | \`0%\` | :white_check_mark: | \`23-24\` &hellip; |
-| foo.py | \`75%\` | \`100%\` | \`75%\` | :white_check_mark: |   |
-
-`);
+| foo.py | \`75%\` | \`100%\` | \`75%\` | :white_check_mark: |   |`);
 
   expect(markdownReport([dummyReport], commit, { minimumCoverage: 80 }))
-    .toBe(`<strong>${defaultReportName}</strong>
+    .toBe(`### ${defaultReportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
 | **All files** | \`77%\` | :x: |
 | \\_\\_init\\_\\_.py | \`80%\` | :white_check_mark: |
 | bar.py | \`75%\` | :x: |
-| foo.py | \`75%\` | :x: |
-
-`);
+| foo.py | \`75%\` | :x: |`);
 
   expect(markdownReport([dummyReport], commit, { showClassNames: true }))
-    .toBe(`<strong>${defaultReportName}</strong>
+    .toBe(`### ${defaultReportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
 | **All files** | \`77%\` | :x: |
 | ClassFoo | \`80%\` | :x: |
 | ClassBar | \`75%\` | :x: |
-| ClassMoo | \`75%\` | :x: |
-
-`);
+| ClassMoo | \`75%\` | :x: |`);
 
   expect(markdownReport([dummyReport], commit, { filteredFiles: ["bar.py"] }))
-    .toBe(`<strong>${defaultReportName}</strong>
+    .toBe(`### ${defaultReportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
 | **All files** | \`77%\` | :x: |
-| bar.py | \`75%\` | :x: |
-
-`);
+| bar.py | \`75%\` | :x: |`);
 
   expect(
     markdownReport([dummyReport], commit, { filteredFiles: ["README.md"] }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
-| **All files** | \`77%\` | :x: |
-
-`);
+| **All files** | \`77%\` | :x: |`);
 
   expect(markdownReport([dummyReport], commit, { filteredFiles: [] }))
-    .toBe(`<strong>${defaultReportName}</strong>
+    .toBe(`### ${defaultReportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
-| **All files** | \`77%\` | :x: |
-
-`);
+| **All files** | \`77%\` | :x: |`);
 
   expect(
     markdownReport(
@@ -518,19 +494,13 @@ test("markdownReport", () => {
       commit,
       { filteredFiles: [] },
     ),
-  ).toBe(`<strong>${defaultReportName} foo.xml</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage |   |
 | - | :-: | :-: |
-| **All files** | \`77%\` | :x: |
-
-<strong>${defaultReportName} bar.xml</strong>
-
-| File | Coverage |   |
-| - | :-: | :-: |
-| **All files** | \`77%\` | :x: |
-
-`);
+| **foo.xml** | \`77%\` | :x: |
+|   |   |   |
+| **bar.xml** | \`77%\` | :x: |`);
 
   expect(
     markdownReport([dummyReport], commit, {
@@ -538,16 +508,14 @@ test("markdownReport", () => {
       linkMissingLines: true,
       showMissingMaxLength: 200,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage |   | Missing |
 | - | :-: | :-: | :-: |
 | **All files** | \`77%\` | :x: |   |
 | \\_\\_init\\_\\_.py | \`80%\` | :x: | [\`24-26\`](https://github.com/someowner/somerepo/blob/deadbeef/__init__.py?plain=1#L24-L26) |
 | bar.py | \`75%\` | :x: | [\`23-24\`](https://github.com/someowner/somerepo/blob/deadbeef/bar.py?plain=1#L23-L24) [\`39-40\`](https://github.com/someowner/somerepo/blob/deadbeef/bar.py?plain=1#L39-L40) [\`50\`](https://github.com/someowner/somerepo/blob/deadbeef/bar.py?plain=1#L50) |
-| foo.py | \`75%\` | :x: |   |
-
-`);
+| foo.py | \`75%\` | :x: |   |`);
 
   expect(
     markdownReport([dummyReport], commit, {
@@ -556,16 +524,14 @@ test("markdownReport", () => {
       linkMissingLinesSourceDir: "path/to/src/",
       showMissingMaxLength: 200,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage |   | Missing |
 | - | :-: | :-: | :-: |
 | **All files** | \`77%\` | :x: |   |
 | \\_\\_init\\_\\_.py | \`80%\` | :x: | [\`24-26\`](https://github.com/someowner/somerepo/blob/deadbeef/path/to/src/__init__.py?plain=1#L24-L26) |
 | bar.py | \`75%\` | :x: | [\`23-24\`](https://github.com/someowner/somerepo/blob/deadbeef/path/to/src/bar.py?plain=1#L23-L24) [\`39-40\`](https://github.com/someowner/somerepo/blob/deadbeef/path/to/src/bar.py?plain=1#L39-L40) [\`50\`](https://github.com/someowner/somerepo/blob/deadbeef/path/to/src/bar.py?plain=1#L50) |
-| foo.py | \`75%\` | :x: |   |
-
-`);
+| foo.py | \`75%\` | :x: |   |`);
 
   expect(
     markdownReport([dummyReport], commit, {
@@ -573,16 +539,14 @@ test("markdownReport", () => {
       linkMissingLines: true,
       showMissingMaxLength: 12,
     }),
-  ).toBe(`<strong>${defaultReportName}</strong>
+  ).toBe(`### ${defaultReportName}
 
 | File | Coverage |   | Missing |
 | - | :-: | :-: | :-: |
 | **All files** | \`77%\` | :x: |   |
 | \\_\\_init\\_\\_.py | \`80%\` | :x: | [\`24-26\`](https://github.com/someowner/somerepo/blob/deadbeef/__init__.py?plain=1#L24-L26) |
 | bar.py | \`75%\` | :x: | [\`23-24\`](https://github.com/someowner/somerepo/blob/deadbeef/bar.py?plain=1#L23-L24) [\`39-40\`](https://github.com/someowner/somerepo/blob/deadbeef/bar.py?plain=1#L39-L40) &hellip; |
-| foo.py | \`75%\` | :x: |   |
-
-`);
+| foo.py | \`75%\` | :x: |   |`);
 });
 
 test("addComment", async () => {
@@ -613,9 +577,7 @@ test("addComment with update", async () => {
 
 | File | Coverage |   |
 | - | :-: | :-: |
-| **All files** | \`78%\` | :x: |
-
-`;
+| **All files** | \`78%\` | :x: |`;
 
   apiMock
     .intercept({
@@ -644,9 +606,7 @@ test("addComment for specific report", async () => {
   const report1Comment = `Report1
 | File | Coverage |   |
 | - | :-: | :-: |
-| **All files** | \`78%\` | :x: |
-
-`;
+| **All files** | \`78%\` | :x: |`;
 
   apiMock
     .intercept({
@@ -673,15 +633,11 @@ test("addComment with update for specific report", async () => {
   const report1Comment = `Report1
 | File | Coverage |   |
 | - | :-: | :-: |
-| **All files** | \`78%\` | :x: |
-
-`;
+| **All files** | \`78%\` | :x: |`;
   const report2Comment = `Report2
 | File | Coverage |   |
 | - | :-: | :-: |
-| **All files** | \`82%\` | :x: |
-
-`;
+| **All files** | \`82%\` | :x: |`;
 
   apiMock
     .intercept({

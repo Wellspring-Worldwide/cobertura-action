@@ -264,7 +264,8 @@ test("processCoverage(test-missing-lines.xml, {skipCovered: true})", async () =>
 
 test("trimFolder", () => {
   expect(trimFolder("/a/b/c/file.xml", 7)).toBe("file.xml");
-  expect(trimFolder("/a/b/c/file.xml", 3)).toBe("/b/c");
+  expect(trimFolder("/a/b/c/file.xml", 3)).toBe("b");
+  expect(trimFolder("/src/fixtures/folder1/coverage.xml", 20)).toBe("folder1");
 });
 
 test("longestCommonPrefix", () => {
